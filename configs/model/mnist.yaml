@@ -21,5 +21,23 @@ net:
   lin3_size: 64
   output_size: 10
 
+loss_fn:
+  _target_: torch.nn.CrossEntropyLoss
+
+additional_metrics:
+  _target_: torchmetrics.MetricCollection
+  metrics:
+    - _target_: torchmetrics.Accuracy
+      task: "multiclass"
+      num_classes: 10
+    - _target_: torchmetrics.F1Score
+      task: "multiclass"
+      average: "macro"
+      num_classes: 10
+
+track_best_val_metrics:
+  - true # For Accuracy
+  - true # For F1 Score
+
 # compile model for faster training with pytorch 2.0
 compile: false
