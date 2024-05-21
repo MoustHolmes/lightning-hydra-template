@@ -1,0 +1,12 @@
+metrics_logger:
+  _target_: src.callbacks.metric_loggers.BestMetricsLogger
+  metrics:
+    _target_: torchmetrics.MetricCollection
+    metrics:
+      - _target_: torchmetrics.Accuracy
+        task: "multiclass"
+        num_classes: 10
+      - _target_: torchmetrics.F1Score
+        task: "multiclass"
+        average: "macro"
+        num_classes: 10
