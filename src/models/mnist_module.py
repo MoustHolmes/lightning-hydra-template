@@ -107,7 +107,7 @@ class MNISTLitModule(LightningModule):
         :param batch: A batch of data (a tuple) containing the input tensor of images and target
             labels.
         :param batch_idx: The index of the current batch.
-        :return: A tensor of losses between model predictions and targets.
+        :return: A dictionary containing the loss, predictions, and target labels.
         """
         loss, preds, targets = self.model_step(batch)
 
@@ -121,12 +121,15 @@ class MNISTLitModule(LightningModule):
         "Lightning hook that is called when a training epoch ends."
         pass
 
-    def validation_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
+    def validation_step(
+        self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int
+    ) -> None:
         """Perform a single validation step on a batch of data from the validation set.
 
         :param batch: A batch of data (a tuple) containing the input tensor of images and target
             labels.
         :param batch_idx: The index of the current batch.
+        :return: A dictionary containing the loss, predictions, and target labels.
         """
         loss, preds, targets = self.model_step(batch)
 
@@ -136,18 +139,23 @@ class MNISTLitModule(LightningModule):
         # return loss preds and targets for use in callbacks
         return {"loss": loss, "preds": preds, "targets": targets}
 
-    def test_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
+    def test_step(
+        self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int
+    ) -> None:
         """Perform a single test step on a batch of data from the test set.
 
         :param batch: A batch of data (a tuple) containing the input tensor of images and target
             labels.
         :param batch_idx: The index of the current batch.
+        :return: A dictionary containing the loss, predictions, and target labels.
         """
         loss, preds, targets = self.model_step(batch)
 
         # log loss
         self.test_loss(loss)
-        self.log("test/loss", self.test_loss, on_step=False, on_epoch=True, prog_bar=True)
+        self.log(
+            "test/loss", self.test_loss, on_step=False, on_epoch=True, prog_bar=True
+        )
         # return loss preds and targets for use in callbacks
         return {"loss": loss, "preds": preds, "targets": targets}
 
