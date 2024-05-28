@@ -6,7 +6,7 @@ metrics_logger:
       - _target_: torchmetrics.Accuracy
         task: "multiclass"
         num_classes: 10
-      - _target_: torchmetrics.AUROC
-        task: "multiclass"
-        average: "macro"
-        num_classes: 10
+      # - _target_: torchmetrics.F1Score
+      #   task: "multiclass"
+      #   average: "macro"
+      #   num_classes: 10

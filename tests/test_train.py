@@ -104,5 +104,5 @@ def test_train_resume(tmp_path: Path, cfg_train: DictConfig) -> None:
     assert "epoch_001.ckpt" in files
     assert "epoch_002.ckpt" not in files
 
-    assert metric_dict_1["train/MulticlassAccuracy"] < metric_dict_2["train/MulticlassAccuracy"]
-    assert metric_dict_1["val/MulticlassAccuracy"] < metric_dict_2["val/MulticlassAccuracy"]
+    assert metric_dict_1["train/loss"] > metric_dict_2["train/loss"]
+    assert metric_dict_1["val/loss"] > metric_dict_2["val/loss"]

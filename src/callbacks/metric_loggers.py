@@ -1,12 +1,11 @@
+import torchmetrics
 from lightning import LightningModule, Trainer
 from lightning.pytorch.callbacks import Callback
-import torchmetrics
 from torchmetrics.wrappers import MetricTracker
 
 
 class MetricsLogger(Callback):
-    """
-    Callback for logging training, validation, and test metrics using torchmetrics.
+    """Callback for logging training, validation, and test metrics using torchmetrics.
 
     This callback logs metrics at the end of each training, validation, and test batch.
     The metrics are logged to the PyTorch Lightning module's logger.
@@ -26,8 +25,7 @@ class MetricsLogger(Callback):
         self.test_metrics = metrics.clone(prefix="test/")
 
     def log_metrics(self, pl_module, metrics, preds, targets):
-        """
-        Log the given metrics to the PyTorch Lightning module's logger.
+        """Log the given metrics to the PyTorch Lightning module's logger.
 
         Args:
             pl_module (LightningModule): The Lightning module being trained.
@@ -46,31 +44,21 @@ class MetricsLogger(Callback):
     def on_train_start(self, trainer, pl_module):
         self.val_metrics.reset()
 
-    def on_train_batch_end(
-        self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx=0
-    ):
-        self.log_metrics(
-            pl_module, self.train_metrics, outputs["preds"], outputs["targets"]
-        )
+    def on_train_batch_end(self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx=0):
+        self.log_metrics(pl_module, self.train_metrics, outputs["preds"], outputs["targets"])
 
     def on_validation_batch_end(
         self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx=0
     ):
-        self.log_metrics(
-            pl_module, self.val_metrics, outputs["preds"], outputs["targets"]
-        )
+        self.log_metrics(pl_module, self.val_metrics, outputs["preds"], outputs["targets"])
 
-    def on_test_batch_end(
-        self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx=0
-    ):
-        self.log_metrics(
-            pl_module, self.test_metrics, outputs["preds"], outputs["targets"]
-        )
+    def on_test_batch_end(self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx=0):
+        self.log_metrics(pl_module, self.test_metrics, outputs["preds"], outputs["targets"])
 
 
 class BestMetricsLogger(MetricsLogger):
-    """
-    Callback for logging and tracking the best validation metrics using torchmetrics.
+    """Callback for logging and tracking the best validation metrics using torchmetrics
+    MetricTracker.
 
     This callback extends MetricLogger to track the best validation metrics over epochs.
     It logs the best metrics observed so far at the end of each validation epoch.
